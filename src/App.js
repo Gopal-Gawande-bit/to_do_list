@@ -1,27 +1,47 @@
 import React,{useEffect, useState} from 'react'
 import Todolist from './Todolist';
 import Input from './Input';
+import Button from './Button';
+import { Grid } from '@mui/material';
+import useStyles from './style';
 
 export default function App() {
-  const[task,setTask]=useState("");
-  const[taskList,setTaskList]=useState([""])
+  const[task,setTask]=useState(' ');
+  const[taskList,setTaskList]=useState([])
+  const[isEmpty,setIsEmpty]=useState(true);
+
+  useEffect( ()=>{
+    if(task==' '){
+      setIsEmpty(true)
+    }
+    else{
+      setIsEmpty(false)
+    }
+
+    
+  } ,[task] )
+  
+  
+  const classes=useStyles();
   
 
-  const array=["gopal","rishi","aditya"];
   
-
-  
-  function changeValue(event){
-    setTask(event.target.value);
-
+  const changeValue=(event)=>{
+     setTask(event.target.value)
+     console.log("cv",event.target.value)
+     console.log("task",task)
   }
 
   const addTask=()=>{
+  
+
     setTaskList((olditem)=>{
       return [...olditem,task];
     });
+   
     setTask(" ");
-
+    
+    
   }
 
   const deleteTask=(id)=>{
@@ -39,33 +59,23 @@ export default function App() {
     
     <div className="main-div">
 
-     <div className="center-div">
+ <Grid container justifyContent='center'>  
+     <div className={`center-div ${classes.centerDiv}`}>
       <h1>To-Do-List</h1>
-
-      {/* <input type="text" onChange={changeValue} value={task} /> */}
-      <Input  onChange={changeValue} value={task}/>
-      <button onClick={addTask}>+</button>
+      <Input onChange={changeValue} value={task} />
+      <Button onClick={addTask} disabled={isEmpty}/>
+      {console.log("isEmpty",isEmpty)}
 
       <ol>
-
-        {/* {   taskList.map(tasks=>{return(<li>{tasks}</li>)})            } */}
-
 {taskList.map((element,index)=>{
   return (
  <Todolist text={element} key={index} onSelect={deleteTask} id={index}
 />
   );
 })}
-
       </ol>
-
-
-
      </div>
-
-
-
-
+     </Grid>
     </div>
     
     
